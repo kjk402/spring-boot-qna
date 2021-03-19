@@ -41,4 +41,32 @@ function onSuccess(data, status) {
   var template = answersTemplate.format(data.writer.userId, data.createdDateTime, data.contents, data.questionId, data.id);
   $(".qna-comment-slipp-articles").prepend(template);
   $("textarea[name=contents]").val("");
+  location.reload();
+}
+
+
+$(document).on("click", ".link-delete-article", deleteAnswer);
+function deleteAnswer(e) {
+  e.preventDefault();
+  var cur = $(this);
+  var url = cur.attr("href");
+  console.log("url : " + url);
+
+  $.ajax({
+    type: 'delete',
+    url: url,
+    dataType: 'json',
+    error: function (xhr, status) {
+      console.log("error");
+    },
+    success: function (data, status) {
+      console.log(data);
+      if (data.valid) {
+        cur.closest("article").remove();
+      } else {
+        alert(data.errorMessage);
+      }
+    }
+  });
+  location.reload();
 }

@@ -27,16 +27,16 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String deleteAnswer(@PathVariable Long id, @PathVariable("answerId") Long answerId, HttpSession session) {
+    public Result deleteAnswer(@PathVariable Long id, @PathVariable("answerId") Long answerId, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return "/user/login";
+            return Result.fail("로그인 유저 아님");
         }
         Answer answer = answerService.findById(answerId);
         User loginUser = HttpSessionUtils.getSessionUser(session);
         if (answer.isMatch(loginUser)) {
             answerService.delete(answer);
         }
-        return "redirect:/questions/" + id;
+        return Result.ok();
     }
 
 }
