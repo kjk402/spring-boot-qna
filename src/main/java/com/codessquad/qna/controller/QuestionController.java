@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,12 @@ public class QuestionController {
 
     @GetMapping
     public String showList(Model model) {
-        model.addAttribute("questions", questionService.findAllQuestion());
+        Page<Question> questions = questionService.findAllQuestion();
+//        int startPage = Math.max(0, questions.getPageable().getPageNumber() -3);
+//        int endPage = Math.min(questions.getTotalPages(), questions.getPageable().getPageNumber() +3);
+        model.addAttribute("questions", questions);
+//        model.addAttribute("startPage", startPage);
+//        model.addAttribute("endPage", endPage);
         return "index";
     }
 
